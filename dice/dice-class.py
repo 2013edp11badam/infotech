@@ -1,0 +1,34 @@
+#!/usr/bin/python
+
+from fltk import *
+import random, glob
+
+class Dice():
+	def __init__(self):
+		self.images = []
+
+		for image in glob.glob("images/dice*.jpg"):
+			self.images.append(image)
+
+		self.window = Fl_Window(100, 100, 260, 290, 'Roll Dice')
+		self.window.begin()
+
+		self.box1 = Fl_Box(5, 5, 250, 250)
+		self.button1 = Fl_Return_Button(5, 260, 250, 25, 'Roll Dice')
+
+		self.roll(self.window)
+
+		self.window.end()
+		self.button1.callback(self.roll)
+		self.window.show()
+		Fl.run()
+
+	def roll(self, w_id):
+		random.shuffle(self.images)
+
+		self.image1 = Fl_JPEG_Image(self.images[0])
+
+		self.box1.image(self.image1.copy(self.box1.w(), self.box1.h()))
+		self.box1.redraw()
+
+dice_window = Dice()

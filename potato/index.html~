@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Potato</title>
+		<script src="jquery.min.js"></script>
+		<script src="script.js"></script>
+		<style>
+			#window {
+				position: absolute;
+				background-color: #999;
+				width: 400;
+				height: 150px;
+				padding: 10px;
+				border: 2px solid #000;
+				border-radius: 10px;
+			}
+
+			#window h2 {
+				margin: 0
+			}
+		</style>
+	</head>
+	</body>
+		<div id="window">
+			<h2>I'm a box!</h2>
+			<p>and I'm following youuuuuuuuu!</p>
+		</div>
+	</body>
+</html>

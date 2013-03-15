@@ -1,0 +1,4 @@
+$(document).mousemove(function(e){
+	var leftamnt = 
+    $("#window").css({left:e.pageX + 20, top:e.pageY - 70});
+});

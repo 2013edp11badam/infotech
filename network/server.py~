@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+
+import socket
+
+def msg(msg_message, msg_type=''):
+	if msg_type == 'error':
+		return '[!] ' + str(msg_message)
+	elif msg_type == 'info':
+		return '[+] ' + str(msg_message)
+
+connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+connection.bind((socket.gethostname(), 12345))
+connection.listen(5)
+
+print msg('server running')
+
+while True:
+	try:
+		client, addr = connection.accept()
+		print msg('connection from ' + addr[0])
+		client.close()
+	except KeyboardInterrupt:
+		client.close()
+		print msg('connect closed unexpectedly', 'error')

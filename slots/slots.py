@@ -29,7 +29,7 @@ def pull_slots(w_id):
 	button_pull.deactivate()
 	credits_output.deactivate()
 	button_credits.deactivate()
-	
+	zz
 
 	if credits > 0:
 		change_credits('', -1)
