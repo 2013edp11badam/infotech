@@ -1,13 +1,18 @@
-#/usr/bin/env python
-import socket, sys
+#!/usr/bin/env python
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_addr = ('127.0.0.1', 1234)
-sock.connect(server_addr)
+from fltk import *
 
-try:
-	while True:
-		msg = raw_input()
-		sock.sendall(msg)
-except KeyboardInterrupt:
-	sock.close()
+class TicTacToe(Fl_Window):
+	def __init__(self):
+		Fl_Window.__init__(self, 100, 100, 310, 310, 'Tic Tac Toe')
+
+		self.begin()
+		self.dict_buttons = {}
+		for y in xrange(3):
+			for x in xrange(3):
+				self.dict_buttons{num: (Fl_Button(x * 100 + 5, y * 100 + 5, 100, 100, str(x, y)))}
+		self.end()
+
+ttt = TicTacToe()
+ttt.show()
+Fl.run()

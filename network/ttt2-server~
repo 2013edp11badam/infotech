@@ -5,11 +5,8 @@ from fltk import *
 class TicTacToe(Fl_Window):
 	def __init__(self):
 		Fl_Window.__init__(self, 100, 100, 310, 370, 'Tic Tac Toe')
-
-		self.begin()
 		self.array_buttons = []
 		for y in xrange(3):
 			for x in xrange(3):
 				self.array_buttons.append(Fl_Button(x * 100 + 5, y * 100 + 35, 100, 100))
 				self.array_buttons[-1].callback(self.send)
-		self.end()

@@ -8,5 +8,8 @@ sock.bind(server_addr)
 print 'listening on %s:%s' % server_addr
 
 while True:
-	data, client_addr = sock.recvfrom(1)
-	print 'received %d from %s:%s' % (int(data), client_addr[0], client_addr[1])
+	try:
+		data, client_addr = sock.recvfrom(1)
+		print 'received %d from %s:%s' % (int(data), client_addr[0], client_addr[1])
+	except ValueError:
+		pass
