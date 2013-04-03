@@ -10,7 +10,7 @@ class TicTacToe(Fl_Window):
 		self.dict_buttons = {}
 		for y in xrange(3):
 			for x in xrange(3):
-				self.dict_buttons{(Fl_Button(x * 100 + 5, y * 100 + 5, 100, 100, str(x, y)))
+				self.dict_buttons{num: (Fl_Button(x * 100 + 5, y * 100 + 5, 100, 100, str(x, y)))}
 		self.end()
 
 ttt = TicTacToe()

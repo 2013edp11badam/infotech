@@ -13,6 +13,5 @@ class TicTacToe(Fl_Window):
 				self.dict_buttons{num: (Fl_Button(x * 100 + 5, y * 100 + 5, 100, 100, str(x, y)))}
 		self.end()
 
-ttt = TicTacToe()
-ttt.show()
+ttt = TicTacToe()a
 Fl.run()

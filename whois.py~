@@ -29,7 +29,7 @@ for domain in queue:
 		print '[' + str(num) + ']: ' + domain + ' is registered (expires: ' + expiry + ')'
 	elif status == 'available':
 		print '[' + str(num) + ']: ' + domain + ' is available'
-		available_domains = open('available-domains.txt', 'a')
+		available_domains = open('/home/s-gough_adam/available-domains.txt', 'a')
 		available_domains.write(domain + "\n")
 		available_domains.close()
 	else:
