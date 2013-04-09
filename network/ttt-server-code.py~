@@ -19,3 +19,4 @@ while True:
 			elif len(clients) == 1:
 				clients['p2'] = client_addr
 				print '%s:%s is player 2' % client_addr
+

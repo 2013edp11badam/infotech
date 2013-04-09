@@ -11,13 +11,14 @@ for letter1 in alphabet:
 		for letter3 in alphabet:
 			queue.append(letter1 + letter2 + letter3 + '.ca')
 
+num = 1
+
 # modify queue if needed
 if len(sys.argv) > 1:
 	del queue[:int(sys.argv[1])]
+	num = int(sys.argv[1])
 
 # query whois
-num = 1
-
 for domain in queue:
 	response = urllib2.urlopen('http://whomsy.com/api/' + domain)
 	json_msg = json.loads(response.read())['message']
@@ -29,7 +30,7 @@ for domain in queue:
 		print '[' + str(num) + ']: ' + domain + ' is registered (expires: ' + expiry + ')'
 	elif status == 'available':
 		print '[' + str(num) + ']: ' + domain + ' is available'
-		available_domains = open('available-domains.txt', 'a')
+		available_domains = open('/home/s-gough_adam/available-domains.txt', 'a')
 		available_domains.write(domain + "\n")
 		available_domains.close()
 	else:
