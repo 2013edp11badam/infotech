@@ -10,7 +10,7 @@ print 'listening on %s:%s' % server_addr
 
 while True:
 	try:
-		data, client_addr = sock.recvfrom(1)
+		data, client_addr = sock.recvfrom(8)
 		print 'received %d from %s:%s' % (int(data), client_addr)
 		if data == '0':
 			if len(clients) == 0:
@@ -19,4 +19,3 @@ while True:
 			elif len(clients) == 1:
 				clients['p2'] = client_addr
 				print '%s:%s is player 2' % client_addr
-
