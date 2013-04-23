@@ -33,21 +33,46 @@ class MyBoard(Fl_Window):
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		self.server_addr = ('127.0.0.1', int(sys.argv[1]))
 
-		self.sock.sendto('connect', self.server_addr)
-
 		# receive function
 		self.fd = self.sock.fileno()
 		Fl.add_fd(self.fd, self.receive)
 
+		self.myturn = False
+		self.sock.sendto(str
+
 	def send(self, w_id):
-		self.sock.sendto(self.board.index(w_id)
+		if self.myturn:
+			self.last_sent = self.board.index(w_id)
+			self.sock.sendto(str(self.last_sent), self.server_addr)
+			self.ships += 1
+			print 'sent ' + str(self.board.index(w_id)) + ' to ' + self.server_addr[0] + ':' + str(self.server_addr[1])
+		else:
+			print 'not your turn'
 
 	def receive(self, fd):
 		(data, addr) = self.sock.recvfrom(32)
-		pass
+		if data == '1':
+			self.board[self.last_sent].label('HIT')
+			self.board[self.last_sent].labelcolor(FL_WHITE)
+			self.board[self.last_sent].color(self.COLOR_HIT)
+			self.board[self.last_sent].deactivate()
+		elif data == '0':
+			self.board[self.last_sent].label('MISS')
+			self.board[self.last_sent].labelcolor(self.COLOR_MISS)
+			self.board[self.last_sent].deactivate()
+		elif data == 'yt':
+			self.myturn = True
+			for button in self.board:
+				button.activate()
+		elif data == 'ot':
+			self.myturn = False
+			for button in self.board:
+				button.deactivate()
+		else:
+			print data
 
 
-mb = MyBoard(50, 100, 350, 350, 'My Board')
+mb = MyBoard(50, 100, 600, 600, 'Battleship')
 mb.show()
 
 Fl.run()
