@@ -1,0 +1,58 @@
+import pygame, sys
+
+pygame.init()
+
+size = [640, 480]
+
+screen = pygame.display.set_mode(size)
+pygame.display.set_caption('My Game')
+clock = pygame.time.Clock()
+
+done = False
+
+rect_x = 100
+rect_y = 100
+rect_x_s = 4
+rect_y_s = 4
+
+ufo_image = pygame.image.load('ufo.png')
+
+while True:
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			sys.exit()
+		elif event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_LEFT:
+				rect_x_s = -2
+			elif event.key == pygame.K_RIGHT:
+				rect_x_s = 2
+			elif event.key == pygame.K_UP:
+				rect_y_s = -2
+			elif event.key == pygame.K_DOWN:
+				rect_y_s = 2
+				
+		elif event.type == pygame.KEYUP:
+			if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+				rect_x_s = 0
+			elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+				rect_y_s = 0
+
+	screen.fill((0, 0, 0))
+
+	rect_x += rect_x_s
+	rect_y += rect_y_s
+
+	if rect_x <= 0:
+		rect_x = size[0] - 1
+	elif rect_x >= size[0]:
+		rect_x = 1
+	elif rect_y <= 0:
+		rect_y = size[1] - 1
+	elif rect_y >= size[1]:
+		rect_y = 1
+
+	ufo = pygame.transform.scale(ufo_image, (rect_x, rect_y))
+	#rect = pygame.draw.rect(screen, (255, 255, 255), (rect_x, rect_y, 15, 15), 0)
+
+	pygame.display.flip()
+	clock.tick(60)

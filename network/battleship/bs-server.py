@@ -70,16 +70,16 @@ class Window(Fl_Window):
 				self.server_ships.append(self.board_ships.index(w_id))
 				w_id.color(self.COLOR_SHIP)
 
-			print 'SERVER SHIPS:', self.server_ships
-
 		# TODO: REDO THIS PART BELOW
 		elif self.game_status == 1:
 			if self.board_shots.index(w_id) in self.client_ships:
 				if len(self.server_hit_shots) == 4:
 					fl_message('You have sunken all of your opponents battleships! Congraulations, you win!')
+					sys.exit()
 				else:
 					self.server_hit_shots.append(self.board_shots.index(w_id))
 				w_id.color(self.COLOR_SHOT_HIT)
+				self.their_turn()
 				self.disable_board(self.board_shots)
 			else:
 				w_id.color(self.COLOR_SHOT_MISS)
@@ -94,15 +94,12 @@ class Window(Fl_Window):
 			if int(data) not in self.client_ships:
 				if len(self.client_ships) < 5:
 					self.client_ships.append(int(data))
-					print 'CLIENT SHIPS:', self.client_ships
 
 		elif self.game_status == 1:
 			if int(data) < 100 and int(data) in self.server_ships:
 				self.sock.sendto('1', self.receive_addr)
-				print 'SENT 1 B/C DATA IN LIST'
 			elif int(data) < 100 and int(data) not in self.server_ships:
 				self.sock.sendto('0', self.receive_addr)
-				print 'SENT 0 B/C DATA NOT IN LIST'
 
 			if int(data) == 222:
 				self.your_turn()

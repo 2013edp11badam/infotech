@@ -17,8 +17,8 @@ class MyFrame(wx.Frame):
 
 class MyApp(wx.App):
      def OnInit(self):
-		frame = MyFrame(None, -1, 'wxboxsizer.py')
-		frame.Show(True)
+        frame = MyFrame(None, -1, 'wxboxsizer.py')
+        frame.Show(True)
 		frame2 = MyFrame(None, -1, 'wxboxsizer.py')
 		frame2.Show(True)
         return True

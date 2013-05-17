@@ -14,14 +14,17 @@ class Window(Fl_Window):
 		# 1 - playing
 		self.game_status = 0
 
-		self.client_ships = []
-
-		self.client_hit_shots = 0
-
 		# various colours
 		self.COLOR_SHIP = FL_DARK_BLUE
 		self.COLOR_SHOT_HIT = FL_RED
 		self.COLOR_SHOT_MISS = FL_DARK2
+
+		# server ships and client ships
+		self.server_ships = []
+		self.client_ships = []
+
+		self.server_hit_shots = []
+		self.client_hit_shots = []
 
 		# game widgets
 		self.box_status = Fl_Box(35, 308, 240, 25)
@@ -46,9 +49,12 @@ class Window(Fl_Window):
 
 		self.end()
 
-		# connect to server
+		# bind to ip and start listening
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-		self.server_addr = (sys.argv[1], int(sys.argv[2]))
+		self.server_addr = ('0.0.0.0', int(sys.argv[1]))
+		self.sock.bind(self.server_addr)
+
+		print 'listening on %s:%s' % self.server_addr
 
 		# receive function
 		self.fd = self.sock.fileno()
@@ -56,41 +62,47 @@ class Window(Fl_Window):
 
 	def on_click(self, w_id):
 		if self.game_status == 0:
-			if self.board_ships.index(w_id) not in self.client_ships:
-				if len(self.client_ships) == 4:
+			if self.board_ships.index(w_id) not in self.server_ships:
+				if len(self.server_ships) == 4:
 					self.disable_board(self.board_ships)
+					self.your_turn()
 					self.game_status = 1
-					self.their_turn()
-				self.client_ships.append(self.board_ships.index(w_id))
-				self.sock.sendto(str(self.board_ships.index(w_id)), self.server_addr)
-				self.last_sent = self.board_ships.index(w_id)
+				self.server_ships.append(self.board_ships.index(w_id))
 				w_id.color(self.COLOR_SHIP)
 
+		# TODO: REDO THIS PART BELOW
 		elif self.game_status == 1:
-			self.sock.sendto(str(self.board_shots.index(w_id)), self.server_addr)
+			if self.board_shots.index(w_id) in self.client_ships:
+				if len(self.server_hit_shots) == 4:
+					fl_message('You have sunken all of your opponents battleships! Congraulations, you win!')
+					sys.exit()
+				else:
+					self.server_hit_shots.append(self.board_shots.index(w_id))
+				w_id.color(self.COLOR_SHOT_HIT)
+				self.disable_board(self.board_shots)
+			else:
+				w_id.color(self.COLOR_SHOT_MISS)
+				self.their_turn()
 			self.sock.sendto('222', self.receive_addr)
-			self.last_sent = self.board_shots.index(w_id)
-			self.disable_board(self.board_shots)
-			self.their_turn()
 
 	def receive(self, fd):
 		data, self.receive_addr = self.sock.recvfrom(32)
-		print 'received %s from server (%s:%s)' % (data, self.receive_addr[0], self.receive_addr[1])
+		print 'received %s from client (%s:%s)' % (data, self.receive_addr[0], self.receive_addr[1])
 		
-		if int(data) == 1:
-			self.client_hit_shots += 1
-			if self.client_hit_shots == 5:
-				fl_message('You have sunken all of your opponents battleships! Congraulations, you win!')
-				sys.exit()
-			self.board_shots[self.last_sent].color(self.COLOR_SHOT_HIT)
-			self.board_shots[self.last_sent].redraw()
-		elif int(data) == 0:
-			self.board_shots[self.last_sent].color(self.COLOR_SHOT_MISS)
-			self.board_shots[self.last_sent].redraw()
+		if self.game_status == 0:
+			if int(data) not in self.client_ships:
+				if len(self.client_ships) < 5:
+					self.client_ships.append(int(data))
 
-		if int(data) == 222:
-			self.your_turn()
-		
+		elif self.game_status == 1:
+			if int(data) < 100 and int(data) in self.server_ships:
+				self.sock.sendto('1', self.receive_addr)
+			elif int(data) < 100 and int(data) not in self.server_ships:
+				self.sock.sendto('0', self.receive_addr)
+
+			if int(data) == 222:
+				self.your_turn()
+
 	def enable_board(self, board):
 		for button in board:
 			button.activate()
@@ -111,7 +123,7 @@ class Window(Fl_Window):
 		self.box_status.label("Their turn!")
 		self.box_status.labelcolor(FL_DARK_RED)
 
-battleship_client = Window(100, 100, "Battleship Client")
-battleship_client.show()
+battleship_server = Window(100, 100, "Battleship Server")
+battleship_server.show()
 Fl.run()
-battleship_client.sock.close()
+battleship_server.sock.close()

@@ -13,10 +13,6 @@ class MyBoard(Fl_Window):
 		self.COLOR_HIT = fl_rgb_color(200, 20, 20)
 		self.COLOR_MISS = fl_rgb_color(50, 50, 50)
 
-		# define game things
-		self.status = 1
-		self.ships = 0
-
 		# create board
 		self.begin()
 		self.board = []
@@ -37,8 +33,9 @@ class MyBoard(Fl_Window):
 		self.fd = self.sock.fileno()
 		Fl.add_fd(self.fd, self.receive)
 
+		# send packet to let server know we're here
 		self.myturn = False
-		self.sock.sendto('connect', self.server_addr)
+		self.sock.sendto('a', self.server_addr)
 
 	def send(self, w_id):
 		if self.myturn:
