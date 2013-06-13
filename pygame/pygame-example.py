@@ -3,6 +3,7 @@
 import pygame, sys, math
 
 def rot_center(image, angle):
+    """rotate an image while keeping its center and size"""
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
     rot_rect = orig_rect.copy()
@@ -69,13 +70,8 @@ while True:
 	if y > size[1] or y < 0:
 		y = 0
 
-	rotrocket = rot_center(rocket, a)
+	rotrocket = pygame.transform.rotate(rocket, a)
 	screen.blit(rotrocket, (x, y))
-	
-	pygame.draw.circle(screen, (255, 255, 255), (b_x, b_y), 10)
-
-	text1 = font.render('(' + str(int(x)) + ', ' + str(int(y)) + ') ' + str(int(a)), 1, (255, 255, 255))
-	screen.blit(text1, (5, 5))
 
 	pygame.display.flip()
 	clock.tick(60)

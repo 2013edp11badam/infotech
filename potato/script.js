@@ -3,7 +3,7 @@ $(document).ready(function(){
 });
 
 $(document).mousemove(function(e){
-    $("#window").css({left:e.pageX + 40, top:e.pageY - 80});
+    $("#window").css({left:e.pageX + 10, top:e.pageY - 50});
 });
 
 $(document).click(function(){
